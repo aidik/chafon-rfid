@@ -1,3 +1,4 @@
 **/*.pyc
 google-credentials.json
 google-token.json
+sftp-config.json
