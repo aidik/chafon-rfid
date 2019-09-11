@@ -12,9 +12,10 @@ from reader.base import ReaderCommand
 from reader.command import G2_TAG_INVENTORY
 from reader.transport import TcpTransport
 from reader.uhfreader18 import G2InventoryResponseFrame
+from reader.uhfreader288m import G2InventoryCommand, G2InventoryResponseFrame as G2InventoryResponseFrame288
 from sheets import GoogleSheetAppender
 
-TCP_PORT = 6000
+TCP_PORT = 27011
 
 valid_chars = string.digits + string.ascii_letters
 
@@ -24,6 +25,7 @@ def is_marathon_tag(tag):
 
 def read_tags(reader_addr, appender):
 
+    get_inventory_288 = G2InventoryCommand(q_value=1)
     get_inventory_uhfreader18 = ReaderCommand(G2_TAG_INVENTORY)
     transport = TcpTransport(reader_addr=reader_addr, reader_port=TCP_PORT, auto_connect=True)
     running = True
@@ -31,8 +33,10 @@ def read_tags(reader_addr, appender):
         start = time.time()
         try:
             now = datetime.now().time()
-            transport.write(get_inventory_uhfreader18.serialize())
-            resp = G2InventoryResponseFrame(transport.read_frame())
+            transport.write(get_inventory_288.serialize())
+            #transport.write(get_inventory_uhfreader18.serialize())
+            #resp = G2InventoryResponseFrame(transport.read_frame())
+            resp = G2InventoryResponseFrame288(transport.read_frame())
             for tag in resp.get_tag():
                 if (is_marathon_tag(tag)):
                     boat_num = str(tag.epc.lstrip('\0'))
