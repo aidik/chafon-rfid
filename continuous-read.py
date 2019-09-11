@@ -25,7 +25,7 @@ def is_marathon_tag(tag):
 def read_tags(reader_addr, appender):
 
     get_inventory_uhfreader18 = ReaderCommand(G2_TAG_INVENTORY)
-    transport = TcpTransport(reader_addr=reader_addr, reader_port=TCP_PORT)
+    transport = TcpTransport(reader_addr=reader_addr, reader_port=TCP_PORT, auto_connect=True)
     running = True
     while running:
         start = time.time()
