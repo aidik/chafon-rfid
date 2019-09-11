@@ -8,7 +8,7 @@ from reader.uhfreader18 import G2InventoryResponseFrame as G2InventoryResponseFr
 from reader.uhfreader288m import G2InventoryCommand, G2InventoryResponseFrame as G2InventoryResponseFrame288
 
 get_reader_info = ReaderCommand(CF_GET_READER_INFO)
-get_inventory_288 = G2InventoryCommand(q_value=4)
+get_inventory_288 = G2InventoryCommand(q_value=1)
 get_inventory_uhfreader18 = ReaderCommand(G2_TAG_INVENTORY)
 
 #transport = MockTransport(bytearray.fromhex('1100210000160c034e001e0a01000000e651' + '1500010301010c0000000000000000000003136bb1a51500010301010c3039606303c74380001a055940f93e1500010301010c49440000000000000a0003346457660d000103010104003230386da3d20700010101001e4b'))
