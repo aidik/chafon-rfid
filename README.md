@@ -27,3 +27,11 @@ Google Sheet
 A second script `single-read.py` shows how to connect to different types of Chafon 
 reader via serial or TCP/IP and obtain information about the reader as well as to 
 perform a read.
+
+License
+-------
+
+This code is based on work of [Will Abson](https://github.com/wabson)
+in [Chafon RFID Repository](https://github.com/wabson/chafon-rfid).
+License is not specified, but I assume an Open Source License. My
+contributions are published under BSD 3-Clause License if original license allows.
