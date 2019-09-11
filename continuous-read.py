@@ -50,7 +50,7 @@ def read_tags(reader_addr, appender):
             print 'Unable to connect to reader'
             continue
         end = time.time()
-        s.close()
+        #s.close()
         #print "elapsed time %.2f" % (end - start)
         try:
             time.sleep(0.05)
