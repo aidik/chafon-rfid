@@ -1,6 +1,7 @@
 import socket
 import threading
 import time
+import argparse
 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -14,6 +15,7 @@ TIMES_RANGE_NAME = 'Chip Finishes!A1:D1'
 class GoogleSheetAppender(threading.Thread):
 
     def __init__(self, spreadsheet_id):
+        print(spreadsheet_id)
         threading.Thread.__init__(self)
         self.__row_data = []
         self.__spreadsheet_id = spreadsheet_id
@@ -37,8 +39,13 @@ class GoogleSheetAppender(threading.Thread):
         store = file.Storage('google-token.json')
         creds = store.get()
         if not creds or creds.invalid:
+            #flags = argparser.parse_args('--auth_host_name localhost --logging_level INFO'.split())
+            parser = argparse.ArgumentParser(add_help=False)
+            parser.add_argument('--logging_level', default='ERROR')
+            parser.add_argument('--noauth_local_webserver', action='store_true', default=True, help='Do not run a local web server.')
+            flags = parser.parse_args([])
             flow = client.flow_from_clientsecrets('google-credentials.json', SCOPES)
-            creds = tools.run_flow(flow, store)
+            creds = tools.run_flow(flow, store, flags)
         try:
             service = build('sheets', 'v4', http=creds.authorize(Http()))
             sheet = service.spreadsheets()
