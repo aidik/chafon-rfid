@@ -74,6 +74,7 @@ class ReaderType(Enum):
 
     UHFReader18   = 0x09
     UHFReader288M = 0x0c
+    UHFReader288MP = 0x20
 
 class ReaderInfoFrame(ReaderResponseFrame):
 
