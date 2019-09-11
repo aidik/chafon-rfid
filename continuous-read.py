@@ -21,7 +21,8 @@ valid_chars = string.digits + string.ascii_letters
 
 def is_marathon_tag(tag):
     tag_data = tag.epc
-    return len(tag_data) == 4 and all([ chr(tag_byte) in valid_chars for tag_byte in tag_data.lstrip('\0') ])
+    return True
+    #return len(tag_data) == 4 and all([ chr(tag_byte) in valid_chars for tag_byte in tag_data.lstrip('\0') ])
 
 def read_tags(reader_addr, appender):
 
@@ -39,7 +40,8 @@ def read_tags(reader_addr, appender):
             resp = G2InventoryResponseFrame288(transport.read_frame())
             for tag in resp.get_tag():
                 if (is_marathon_tag(tag)):
-                    boat_num = str(tag.epc.lstrip('\0'))
+                    #boat_num = str(tag.epc.lstrip('\0'))
+                    boat_num = binascii.hexlify(tag.epc)
                     boat_time = str(now)[:12]
                     print '{0} {1}'.format(boat_num, boat_time)
                     if appender is not None:
@@ -60,6 +62,7 @@ def read_tags(reader_addr, appender):
             time.sleep(0.05)
         except KeyboardInterrupt:
             running = False
+            transport.close()
             print "KeyboardInterrupt"
 
 if __name__ == "__main__":
