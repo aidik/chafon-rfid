@@ -15,6 +15,8 @@ get_inventory_uhfreader18 = ReaderCommand(G2_TAG_INVENTORY)
 #transport = SerialTransport(auto_connect=True)
 #transport = TcpTransport(reader_addr='192.168.0.250', reader_port=27011)
 transport = TcpTransport(reader_addr='192.168.1.190', reader_port=6000)
+transport = TcpTransport(reader_addr='192.168.1.25', reader_port=27011, auto_connect=True)
+#transport = TcpTransport(reader_addr='192.168.1.190', reader_port=6000)
 runner = CommandRunner(transport)
 
 reader_info = ReaderInfoFrame(runner.run(get_reader_info))
