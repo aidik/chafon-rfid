@@ -6,6 +6,7 @@ import string
 import time
 import sys
 import mysql.connector
+import sqlite3
 
 from datetime import datetime
 
@@ -36,6 +37,20 @@ def insert_into_Maria(tag, time):
     mydb.commit()
 
     #print(mycursor.rowcount, "record inserted.")
+
+
+sqlitedb = sqlite3.connect('rfid.db')
+sqlitecursor = sqlitedb.cursor()
+
+def insert_into_sqlite(tag, time):
+    sql = "INSERT INTO tags (tag, time) VALUES (?, ?)"
+    val = (tag, time)
+    sqlitecursor.execute(sql, val)
+
+    sqlitedb.commit()
+
+    #print(mycursor.rowcount, "record inserted.")
+
 valid_chars = string.digits + string.ascii_letters
 
 def is_marathon_tag(tag):
@@ -67,6 +82,11 @@ def read_tags(reader_addr, appender):
                         insert_into_Maria(boat_num, boat_time)
                     except:
                         print("An exception occurred while talking to Maria")
+                    try:
+                        insert_into_sqlite(boat_num, boat_time)
+                    except:
+                        print("An exception occurred while talking to SQLite")
+
                     if appender is not None:
                         appender.add_row([ boat_num, boat_time, '', '' ])
                 else:
@@ -76,6 +96,7 @@ def read_tags(reader_addr, appender):
             running = False
             mycursor.close()
             mydb.close()
+            sqlitedb.close()
             print "KeyboardInterrupt"
         except socket.error as err:
             print 'Unable to connect to reader'
@@ -90,6 +111,7 @@ def read_tags(reader_addr, appender):
             transport.close()
             mycursor.close()
             mydb.close()
+            sqlitedb.close()
             print "KeyboardInterrupt"
 
 if __name__ == "__main__":
