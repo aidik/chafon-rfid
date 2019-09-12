@@ -5,6 +5,7 @@ import socket
 import string
 import time
 import sys
+import mysql.connector
 
 from datetime import datetime
 
@@ -17,6 +18,24 @@ from sheets import GoogleSheetAppender
 
 TCP_PORT = 27011
 
+
+mydb = mysql.connector.connect(
+  host="192.168.1.230",
+  user="rfidusr",
+  passwd="rfidpsw",
+  database='rfid',
+)
+
+mycursor = mydb.cursor()
+
+def insert_into_Maria(tag, time):
+    sql = "INSERT INTO tags (tag, time) VALUES (%s, %s)"
+    val = (tag, time)
+    mycursor.execute(sql, val)
+
+    mydb.commit()
+
+    #print(mycursor.rowcount, "record inserted.")
 valid_chars = string.digits + string.ascii_letters
 
 def is_marathon_tag(tag):
@@ -44,6 +63,10 @@ def read_tags(reader_addr, appender):
                     boat_num = binascii.hexlify(tag.epc)
                     boat_time = str(now)[:12]
                     print '{0} {1}'.format(boat_num, boat_time)
+                    try:
+                        insert_into_Maria(boat_num, boat_time)
+                    except:
+                        print("An exception occurred while talking to Maria")
                     if appender is not None:
                         appender.add_row([ boat_num, boat_time, '', '' ])
                 else:
@@ -51,6 +74,8 @@ def read_tags(reader_addr, appender):
             #print "received %s tags" % (resp.num_tags)
         except KeyboardInterrupt:
             running = False
+            mycursor.close()
+            mydb.close()
             print "KeyboardInterrupt"
         except socket.error as err:
             print 'Unable to connect to reader'
@@ -63,6 +88,8 @@ def read_tags(reader_addr, appender):
         except KeyboardInterrupt:
             running = False
             transport.close()
+            mycursor.close()
+            mydb.close()
             print "KeyboardInterrupt"
 
 if __name__ == "__main__":
