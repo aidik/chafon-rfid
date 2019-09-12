@@ -94,6 +94,7 @@ def read_tags(reader_addr, appender):
             #print "received %s tags" % (resp.num_tags)
         except KeyboardInterrupt:
             running = False
+            transport.close()
             mycursor.close()
             mydb.close()
             sqlitedb.close()
