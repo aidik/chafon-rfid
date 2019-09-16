@@ -77,7 +77,7 @@ def read_tags(reader_addr, appender):
                     #boat_num = str(tag.epc.lstrip('\0'))
                     boat_num = binascii.hexlify(tag.epc)
                     boat_time = str(now)[:12]
-                    print '{0} {1}'.format(boat_num, boat_time)
+                    print '{0} {1} -- Antena: {2} | RSSI: {3}'.format(boat_num, boat_time, tag.antenna_num, tag.rssi)
                     try:
                         insert_into_Maria(boat_num, boat_time)
                     except:
