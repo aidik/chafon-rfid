@@ -101,6 +101,10 @@ def read_tags(reader_addr, appender):
             print "KeyboardInterrupt"
         except socket.error as err:
             print 'Unable to connect to reader'
+            running = False
+            transport.close()
+            time.sleep(0.25)
+            read_tags(reader_addr, appender)
             continue
         end = time.time()
         #s.close()
