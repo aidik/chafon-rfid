@@ -29,9 +29,9 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-def insert_into_Maria(tag, time):
-    sql = "INSERT INTO tags (tag, time) VALUES (%s, %s)"
-    val = (tag, time)
+def insert_into_Maria(tag, time, ant, rssi):
+    sql = "INSERT INTO tags (tag, time, antenna, rssi) VALUES (%s, %s, %s, %s)"
+    val = (tag, time, ant, rssi)
     mycursor.execute(sql, val)
 
     mydb.commit()
@@ -42,9 +42,9 @@ def insert_into_Maria(tag, time):
 sqlitedb = sqlite3.connect('rfid.db')
 sqlitecursor = sqlitedb.cursor()
 
-def insert_into_sqlite(tag, time):
-    sql = "INSERT INTO tags (tag, time) VALUES (?, ?)"
-    val = (tag, time)
+def insert_into_sqlite(tag, time, ant, rssi):
+    sql = "INSERT INTO tags (tag, time, antenna, rssi) VALUES (?, ?, ?, ?)"    
+    val = (tag, time, ant, rssi)
     sqlitecursor.execute(sql, val)
 
     sqlitedb.commit()
@@ -79,11 +79,11 @@ def read_tags(reader_addr, appender):
                     boat_time = str(now)[:12]
                     print '{0} {1} -- Antena: {2} | RSSI: {3}'.format(boat_num, boat_time, tag.antenna_num, tag.rssi)
                     try:
-                        insert_into_Maria(boat_num, boat_time)
+                        insert_into_Maria(boat_num, boat_time, tag.antenna_num, tag.rssi)
                     except:
                         print("An exception occurred while talking to Maria")
                     try:
-                        insert_into_sqlite(boat_num, boat_time)
+                        insert_into_sqlite(boat_num, boat_time, tag.antenna_num, tag.rssi)
                     except:
                         print("An exception occurred while talking to SQLite")
 
