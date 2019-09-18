@@ -88,7 +88,8 @@ def read_tags(reader_addr, appender):
                         print("An exception occurred while talking to SQLite")
 
                     if appender is not None:
-                        appender.add_row([ boat_num, boat_time, '', '' ])
+                        #appender.add_row([ boat_num, boat_time, "'"+tag.antenna_num+"'", tag.rssi])
+                        appender.add_row([ boat_num, boat_time, tag.antenna_num, tag.rssi])
                 else:
                     print "Non-marathon tag 0x%s" % (binascii.hexlify(tag.epc))
             #print "received %s tags" % (resp.num_tags)
