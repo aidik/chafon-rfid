@@ -25,7 +25,7 @@ class G2InventoryResponseFrame(ReaderResponseFrame):
         self.num_tags = 0
         self.antenna = 0
         if len(self.data) > self.tag_data_prefix_bytes:
-            self.antenna = self.data[0]
+            self.antenna = "{:04b}".format(self.data[0])
             self.num_tags = self.data[1]
 
     def get_tag(self):
